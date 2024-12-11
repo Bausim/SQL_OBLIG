@@ -1,0 +1,476 @@
+USE [master]
+GO
+/****** Object:  Database [IMDB_OB]    Script Date: 06/11/2024 17.13.24 ******/
+CREATE DATABASE [IMDB_OB]
+ CONTAINMENT = NONE
+ ON  PRIMARY 
+( NAME = N'IMDB_OB', FILENAME = N'C:\Users\simon\IMDB_OB.mdf' , SIZE = 73728KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+ LOG ON 
+( NAME = N'IMDB_OB_log', FILENAME = N'C:\Users\simon\IMDB_OB_log.ldf' , SIZE = 270336KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+ WITH CATALOG_COLLATION = DATABASE_DEFAULT
+GO
+ALTER DATABASE [IMDB_OB] SET COMPATIBILITY_LEVEL = 150
+GO
+IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
+begin
+EXEC [IMDB_OB].[dbo].[sp_fulltext_database] @action = 'enable'
+end
+GO
+ALTER DATABASE [IMDB_OB] SET ANSI_NULL_DEFAULT OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET ANSI_NULLS OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET ANSI_PADDING OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET ANSI_WARNINGS OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET ARITHABORT OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET AUTO_CLOSE OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET AUTO_SHRINK OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET AUTO_UPDATE_STATISTICS ON 
+GO
+ALTER DATABASE [IMDB_OB] SET CURSOR_CLOSE_ON_COMMIT OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET CURSOR_DEFAULT  GLOBAL 
+GO
+ALTER DATABASE [IMDB_OB] SET CONCAT_NULL_YIELDS_NULL OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET NUMERIC_ROUNDABORT OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET QUOTED_IDENTIFIER OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET RECURSIVE_TRIGGERS OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET  DISABLE_BROKER 
+GO
+ALTER DATABASE [IMDB_OB] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET DATE_CORRELATION_OPTIMIZATION OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET TRUSTWORTHY OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET PARAMETERIZATION SIMPLE 
+GO
+ALTER DATABASE [IMDB_OB] SET READ_COMMITTED_SNAPSHOT OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET HONOR_BROKER_PRIORITY OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET RECOVERY SIMPLE 
+GO
+ALTER DATABASE [IMDB_OB] SET  MULTI_USER 
+GO
+ALTER DATABASE [IMDB_OB] SET PAGE_VERIFY CHECKSUM  
+GO
+ALTER DATABASE [IMDB_OB] SET DB_CHAINING OFF 
+GO
+ALTER DATABASE [IMDB_OB] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+GO
+ALTER DATABASE [IMDB_OB] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+GO
+ALTER DATABASE [IMDB_OB] SET DELAYED_DURABILITY = DISABLED 
+GO
+ALTER DATABASE [IMDB_OB] SET ACCELERATED_DATABASE_RECOVERY = OFF  
+GO
+ALTER DATABASE [IMDB_OB] SET QUERY_STORE = OFF
+GO
+USE [IMDB_OB]
+GO
+/****** Object:  Table [dbo].[Genres]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Genres](
+	[genreID] [int] IDENTITY(1,1) NOT NULL,
+	[genre] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[genreID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Title]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Title](
+	[tconst] [nvarchar](50) NOT NULL,
+	[titleType] [nvarchar](50) NULL,
+	[primaryTitle] [nvarchar](255) NULL,
+	[originalTitle] [nvarchar](255) NULL,
+	[isAdult] [bit] NULL,
+	[startYear] [int] NULL,
+	[endYear] [int] NULL,
+	[runtimeMinutes] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[tconst] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Person]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Person](
+	[nconst] [nvarchar](50) NOT NULL,
+	[primaryName] [nvarchar](100) NULL,
+	[birthYear] [int] NULL,
+	[deathYear] [int] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[nconst] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Crew]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Crew](
+	[tconst] [nvarchar](50) NOT NULL,
+	[directors] [nvarchar](255) NULL,
+	[writers] [nvarchar](255) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[tconst] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TitleGenres]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TitleGenres](
+	[tconst] [nvarchar](50) NOT NULL,
+	[GenreID] [int] NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[tconst] ASC,
+	[GenreID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[view_MovieDetails]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[view_MovieDetails] AS
+SELECT 
+    T.tconst,
+    T.primaryTitle,
+    T.originalTitle,
+    T.titleType,
+    T.startYear,
+    T.endYear,
+    T.runtimeMinutes,
+    G.genre,
+    P_Director.primaryName AS Director,
+    P_Writer.primaryName AS Writer
+FROM 
+    [IMDB_OB].[dbo].[Title] T
+-- Join with Crew table to get director and writer nconsts
+INNER JOIN 
+    [IMDB_OB].[dbo].[Crew] C ON T.tconst = C.tconst
+-- Join with Person table to get director's name (assuming single director)
+INNER JOIN 
+    [IMDB_OB].[dbo].[Person] P_Director ON C.directors = P_Director.nconst
+-- Join with Person table to get writer's name (assuming single writer)
+INNER JOIN 
+    [IMDB_OB].[dbo].[Person] P_Writer ON C.writers = P_Writer.nconst
+-- Join with MovieGenres table to link to genres
+INNER JOIN 
+    [IMDB_OB].[dbo].[TitleGenres] MG ON T.tconst = MG.tconst
+-- Join with Genres table to get genre name
+INNER JOIN 
+    [IMDB_OB].[dbo].[Genres] G ON MG.genreID = G.genreID;
+GO
+/****** Object:  Table [dbo].[TitleDirectors]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TitleDirectors](
+	[tconst] [nvarchar](50) NOT NULL,
+	[nconst] [nvarchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[tconst] ASC,
+	[nconst] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[TitleWriters]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[TitleWriters](
+	[tconst] [nvarchar](50) NOT NULL,
+	[nconst] [nvarchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[tconst] ASC,
+	[nconst] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[vw_TitleDetails]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE VIEW [dbo].[vw_TitleDetails] AS
+SELECT 
+    T.tconst,
+    T.primaryTitle,
+    T.startYear,
+    T.runtimeMinutes,
+    G.GenreID,
+    D.nconst AS DirectorNConst,
+    P.primaryName AS DirectorName,
+    W.nconst AS WriterNConst,
+    KP.primaryName AS WriterName
+FROM 
+    Title T
+LEFT JOIN TitleGenres TG ON T.tconst = TG.tconst
+LEFT JOIN Genres G ON TG.GenreID = G.GenreID
+LEFT JOIN TitleDirectors D ON T.tconst = D.tconst
+LEFT JOIN Person P ON D.nconst = P.nconst
+LEFT JOIN TitleWriters W ON T.tconst = W.tconst
+LEFT JOIN Person KP ON W.nconst = KP.nconst;
+GO
+/****** Object:  Table [dbo].[PersonsProfessions]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[PersonsProfessions](
+	[ProfessionID] [int] NOT NULL,
+	[nconst] [nvarchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ProfessionID] ASC,
+	[nconst] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[KnownForTitles]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[KnownForTitles](
+	[tconst] [nvarchar](50) NOT NULL,
+	[nconst] [nvarchar](50) NOT NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[tconst] ASC,
+	[nconst] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  View [dbo].[vw_PersonDetails]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+
+
+CREATE VIEW [dbo].[vw_PersonDetails] AS
+SELECT 
+    P.nconst,
+    P.primaryName,
+    PP.ProfessionID,
+    T.tconst AS KnownForTConst,
+    T.primaryTitle AS KnownForTitle,
+    D.nconst AS DirectedTitleNConst,
+    TD.primaryTitle AS DirectedTitle
+FROM 
+    Person P
+LEFT JOIN PersonsProfessions PP ON P.nconst = PP.nconst
+LEFT JOIN [dbo].[KnownForTitles] KFT ON P.nconst = KFT.nconst  -- Adjust schema if needed
+LEFT JOIN Title T ON KFT.tconst = T.tconst
+LEFT JOIN TitleDirectors D ON D.nconst = P.nconst
+LEFT JOIN TitleWriters W on W.nconst = P.nconst
+LEFT JOIN Title TD ON D.tconst = TD.tconst;
+GO
+/****** Object:  Table [dbo].[Directors]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Directors](
+	[directorID] [int] IDENTITY(1,1) NOT NULL,
+	[director] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[directorID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Profession]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Profession](
+	[ProfessionID] [int] IDENTITY(1,1) NOT NULL,
+	[Profession] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[ProfessionID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+/****** Object:  Table [dbo].[Writers]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE TABLE [dbo].[Writers](
+	[writerID] [int] IDENTITY(1,1) NOT NULL,
+	[writer] [nvarchar](50) NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[writerID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+SET ANSI_PADDING ON
+GO
+/****** Object:  Index [idx_genre]    Script Date: 06/11/2024 17.13.24 ******/
+CREATE UNIQUE NONCLUSTERED INDEX [idx_genre] ON [dbo].[Genres]
+(
+	[genre] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON [PRIMARY]
+GO
+ALTER TABLE [dbo].[KnownForTitles]  WITH CHECK ADD FOREIGN KEY([nconst])
+REFERENCES [dbo].[Person] ([nconst])
+GO
+ALTER TABLE [dbo].[KnownForTitles]  WITH CHECK ADD FOREIGN KEY([tconst])
+REFERENCES [dbo].[Title] ([tconst])
+GO
+ALTER TABLE [dbo].[PersonsProfessions]  WITH CHECK ADD FOREIGN KEY([nconst])
+REFERENCES [dbo].[Person] ([nconst])
+GO
+ALTER TABLE [dbo].[PersonsProfessions]  WITH CHECK ADD FOREIGN KEY([ProfessionID])
+REFERENCES [dbo].[Profession] ([ProfessionID])
+GO
+ALTER TABLE [dbo].[TitleDirectors]  WITH CHECK ADD FOREIGN KEY([nconst])
+REFERENCES [dbo].[Person] ([nconst])
+GO
+ALTER TABLE [dbo].[TitleDirectors]  WITH CHECK ADD FOREIGN KEY([tconst])
+REFERENCES [dbo].[Title] ([tconst])
+GO
+ALTER TABLE [dbo].[TitleGenres]  WITH CHECK ADD FOREIGN KEY([GenreID])
+REFERENCES [dbo].[Genres] ([genreID])
+GO
+ALTER TABLE [dbo].[TitleGenres]  WITH CHECK ADD FOREIGN KEY([tconst])
+REFERENCES [dbo].[Title] ([tconst])
+GO
+ALTER TABLE [dbo].[TitleWriters]  WITH CHECK ADD FOREIGN KEY([nconst])
+REFERENCES [dbo].[Person] ([nconst])
+GO
+ALTER TABLE [dbo].[TitleWriters]  WITH CHECK ADD FOREIGN KEY([tconst])
+REFERENCES [dbo].[Title] ([tconst])
+GO
+/****** Object:  StoredProcedure [dbo].[CheckPersonExists]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[CheckPersonExists]
+    @nconst NVARCHAR(50),
+    @Exists BIT OUTPUT
+AS
+BEGIN
+    SET @Exists = CASE WHEN EXISTS (SELECT 1 FROM Person WHERE nconst = @nconst) THEN 1 ELSE 0 END
+END
+GO
+/****** Object:  StoredProcedure [dbo].[CheckTitleExists]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[CheckTitleExists]
+    @tconst NVARCHAR(50),
+    @Exists BIT OUTPUT
+AS
+BEGIN
+    SET @Exists = CASE WHEN EXISTS (SELECT 1 FROM Title WHERE tconst = @tconst) THEN 1 ELSE 0 END
+END
+GO
+/****** Object:  StoredProcedure [dbo].[SearchPersons]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+-- Test search for persons with the name "Smith"
+CREATE PROCEDURE [dbo].[SearchPersons]
+    @Name NVARCHAR(100)
+AS
+BEGIN
+    SELECT 
+        P.primaryName AS PersonName,
+        STRING_AGG(PROF.Profession, ', ') AS Professions,
+        STRING_AGG(T.primaryTitle, ', ') AS KnownForTitles
+    FROM 
+        Person P
+    LEFT JOIN PersonsProfessions PP ON P.nconst = PP.nconst
+    LEFT JOIN Profession PROF ON PP.ProfessionID = PROF.ProfessionID
+    LEFT JOIN KnownForTitles KFT ON P.nconst = KFT.nconst
+    LEFT JOIN Title T ON KFT.tconst = T.tconst
+    WHERE 
+        P.primaryName LIKE '%' + @Name + '%'
+    GROUP BY 
+        P.primaryName
+    ORDER BY 
+        P.primaryName;
+END;
+
+GO
+/****** Object:  StoredProcedure [dbo].[SearchTitles]    Script Date: 06/11/2024 17.13.24 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
+CREATE PROCEDURE [dbo].[SearchTitles]
+    @Titles NVARCHAR(100)
+AS
+BEGIN
+    SELECT 
+        T.primaryTitle AS Title,
+        STRING_AGG(G.genre, ', ') AS Genres,
+        STRING_AGG(DR.primaryName, ', ') AS Directors,
+        STRING_AGG(WR.primaryName, ', ') AS Writers
+    FROM 
+        Title T
+    LEFT JOIN TitleGenres TG ON T.tconst = TG.tconst
+    LEFT JOIN Genres G ON TG.GenreID = G.genreID
+    LEFT JOIN TitleDirectors TD ON T.tconst = TD.tconst
+    LEFT JOIN Person DR ON TD.nconst = DR.nconst
+    LEFT JOIN TitleWriters TW ON T.tconst = TW.tconst
+    LEFT JOIN Person WR ON TW.nconst = WR.nconst
+    WHERE 
+        T.primaryTitle LIKE '%' + @Titles+ '%'
+    GROUP BY 
+        T.primaryTitle
+    ORDER BY 
+        T.primaryTitle;
+END;
+GO
+USE [master]
+GO
+ALTER DATABASE [IMDB_OB] SET  READ_WRITE 
+GO
